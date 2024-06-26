@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+import random
 
 class Fecha:
     def __init__(self, dia, mes, año):
@@ -73,7 +74,7 @@ class Alumno:
             return self.datos == otro_alumno.datos
         return False
 
-    class Nodo:
+class Nodo:
     def __init__(self, dato):
         self.dato = dato
         self.siguiente = None
@@ -94,6 +95,46 @@ class ListaDoblementeEnlazada:
             nuevo_nodo.anterior = self.cola
             self.cola = nuevo_nodo
     
+    def ordenar_por_fecha_ingreso(self):
+        if self.cabeza is None:
+            return  # Lista vacía, no hay nada que ordenar
+        actual = self.cabeza
+    
+    # Bubble Sort para ordenar la lista
+        ordenado = False
+        while not ordenado:
+            ordenado = True
+            siguiente = actual.siguiente
+            while siguiente is not None:
+                fecha_ingreso_actual = datetime(actual.dato.datos["FechaIngreso"].año, actual.dato.datos["FechaIngreso"].mes, actual.dato.datos["FechaIngreso"].dia)
+                fecha_ingreso_siguiente = datetime(siguiente.dato.datos["FechaIngreso"].año, siguiente.dato.datos["FechaIngreso"].mes, siguiente.dato.datos["FechaIngreso"].dia)
+                if fecha_ingreso_actual > fecha_ingreso_siguiente:
+
+                    self.intercambiar_nodos(actual,siguiente)
+                    ordenado = False
+                actual = siguiente
+                siguiente = siguiente.siguiente
+
+            actual = self.cabeza
+                
+
+    def intercambiar_nodos(self, nodo1, nodo2):
+        """Intercambia dos nodos en la lista."""
+        if nodo1 == self.cabeza:
+            self.cabeza = nodo2
+        if nodo2 == self.cola:
+            self.cola = nodo1
+
+        # Intercambio de referencias para los nodos adyacentes
+        if nodo1.anterior is not None:
+            nodo1.anterior.siguiente = nodo2
+        if nodo2.siguiente is not None:
+            nodo2.siguiente.anterior = nodo1
+
+        # Intercambio de referencias de los nodos a intercambiar
+        nodo1.siguiente, nodo2.siguiente = nodo2.siguiente, nodo1.siguiente
+        nodo1.anterior, nodo2.anterior = nodo2.anterior, nodo1.anterior
+
     def lista_ejemplo(self):
         carreras = ["Ingeniería", "Medicina", "Derecho", "Psicología"]
         for _ in range(5):
