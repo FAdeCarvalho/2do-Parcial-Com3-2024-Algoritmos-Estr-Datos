@@ -72,3 +72,50 @@ class Alumno:
         if isinstance(otro_alumno, Alumno):
             return self.datos == otro_alumno.datos
         return False
+
+    class Nodo:
+    def __init__(self, dato):
+        self.dato = dato
+        self.siguiente = None
+        self.anterior = None
+
+class ListaDoblementeEnlazada:
+    def __init__(self):
+        self.cabeza = None
+        self.cola = None
+    
+    def agregar_al_final(self, dato):
+        nuevo_nodo = Nodo(dato)
+        if self.cabeza is None:
+            self.cabeza = nuevo_nodo
+            self.cola = nuevo_nodo
+        else:
+            self.cola.siguiente = nuevo_nodo
+            nuevo_nodo.anterior = self.cola
+            self.cola = nuevo_nodo
+    
+    def lista_ejemplo(self):
+        carreras = ["Ingeniería", "Medicina", "Derecho", "Psicología"]
+        for _ in range(5):
+            nombre = f"Alumno {random.randint(1, 100)}"
+            dni = random.randint(10000000, 99999999)
+            fecha_ingreso = Fecha(random.randint(1, 28), random.randint(1, 12), 2022)
+            carrera = random.choice(carreras)
+            alumno = Alumno(nombre, dni, fecha_ingreso, carrera)
+            self.agregar_al_final(alumno)
+        return self
+    
+    def __iter__(self):
+        return IteradorListaDoblementeEnlazada(self.cabeza)
+
+class IteradorListaDoblementeEnlazada:
+    def __init__(self, cabeza):
+        self.actual = cabeza
+
+    def __next__(self):
+        if self.actual is None:
+            raise StopIteration
+        dato = self.actual.dato
+        self.actual = self.actual.siguiente
+        return dato
+
