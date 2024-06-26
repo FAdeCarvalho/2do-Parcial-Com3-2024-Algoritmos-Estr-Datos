@@ -36,3 +36,39 @@ print(fecha3)  # 22/05/2022
 print(fecha1 == fecha2)  # False
 print(fecha1 == fecha1)  # True
 
+class Alumno:
+    def __init__(self, nombre, dni, fecha_ingreso, carrera):
+        self.datos = {
+            "Nombre": nombre,
+            "DNI": dni,
+            "FechaIngreso": fecha_ingreso,
+            "Carrera": carrera
+        }
+
+    def cambiar_dato(self, clave, nuevo_valor):
+        if clave in self.datos:
+            self.datos[clave] = nuevo_valor
+        else:
+            print(f"La clave '{clave}' no existe en el diccionario del alumno.")
+
+    def cambiar_datos(self, nuevos_datos):
+        for clave, valor in nuevos_datos.items():
+            self.cambiar_dato(clave, valor)
+
+    def antiguedad(self):
+        fecha_actual = datetime.now()
+        fecha_ingreso_datetime = datetime(
+            self.datos["FechaIngreso"].año, 
+            self.datos["FechaIngreso"].mes, 
+            self.datos["FechaIngreso"].dia
+        )
+        dias_transcurridos = (fecha_actual - fecha_ingreso_datetime).days
+        return dias_transcurridos
+
+    def __str__(self):
+        return f"Nombre: {self.datos['Nombre']}\nDNI: {self.datos['DNI']}\nFecha de Ingreso: {self.datos['FechaIngreso']}\nCarrera: {self.datos['Carrera']}"
+
+    def __eq__(self, otro_alumno):
+        if isinstance(otro_alumno, Alumno):
+            return self.datos == otro_alumno.datos
+        return False
