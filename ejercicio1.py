@@ -149,7 +149,38 @@ class ListaDoblementeEnlazada:
     def __iter__(self):
         return IteradorListaDoblementeEnlazada(self.cabeza)
 
+def guardar_alumnos_en_archivo(self, ruta_archivo):
+        """Guarda los datos de los alumnos en un archivo."""
+        try:
+            with open(ruta_archivo, "w") as archivo:
+                for alumno in self:
+                    archivo.write(f"{alumno}\n")
+            print(f"Alumnos guardados en '{ruta_archivo}'")
+        except Exception as e:
+            print(f"Error al guardar los alumnos: {e}") 
+
+    def mover_directorio(self, ruta_origen, ruta_destino):
+        """Mueve un directorio."""
+        try:
+            os.rename(ruta_origen, ruta_destino)
+            print(f"Directorio '{ruta_origen}' movido a '{ruta_destino}'")
+        except Exception as e:
+            print(f"Error al mover el directorio: {e}")
+
+    def borrar_archivo_y_directorio(self, ruta_destino):
+        """Borra un archivo y su directorio."""
+        try:
+            for filename in os.listdir(ruta_destino):
+                filepath = os.path.join(ruta_destino, filename)
+                if os.path.isfile(filepath):
+                    os.remove(filepath)
+            os.rmdir(ruta_destino)
+            print(f"Directorio '{ruta_destino}' y sus archivos borrados")
+        except Exception as e:
+            print(f"Error al borrar el directorio: {e}")    
+
 class IteradorListaDoblementeEnlazada:
+
     def __init__(self, cabeza):
         self.actual = cabeza
 
@@ -159,4 +190,28 @@ class IteradorListaDoblementeEnlazada:
         dato = self.actual.dato
         self.actual = self.actual.siguiente
         return dato
+
+# Ejemplo de uso:
+lista_alumnos = ListaDoblementeEnlazada()
+lista_alumnos.lista_ejemplo()
+
+# Crear directorio si no existe
+nombre_directorio = "Directorio"
+if not os.path.exists(nombre_directorio):
+    os.mkdir(nombre_directorio)
+
+# Guardar alumnos en archivo
+ruta_archivo = os.path.join(nombre_directorio, "lista_alumnos.txt")
+lista_alumnos.guardar_alumnos_en_archivo(ruta_archivo)
+
+# Mover directorio
+ruta_origen = nombre_directorio
+ruta_destino = "nuevo directorio"
+os.mkdir(ruta_destino)  # Crea el nuevo directorio
+lista_alumnos.mover_directorio(ruta_origen, ruta_destino)
+
+# Borrar archivo y directorio
+lista_alumnos.borrar_archivo_y_directorio(ruta_destino)
+
+
 
